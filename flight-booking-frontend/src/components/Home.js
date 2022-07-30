@@ -129,6 +129,7 @@ export class Home extends Component {
       date: this.state.date,
     };
     console.log(formData);
+    console.log("this.props onSunmit",this.props)
     const res = await this.props.validateSearch(formData);
     console.log(res);
     if (res) {
@@ -260,7 +261,7 @@ export class Home extends Component {
             <Card key={flight._id} style={{ marginBottom: "2rem" }}>
               <Card.Header>{flight.name}</Card.Header>
               <Card.Body>
-                <Card.Title>{flight.airlines}</Card.Title>
+                <Card.Title>{flight.airlines}</Card.Title> 
                 <Card.Text>
                   <table style={{ width: "100%", tableLayout: "fixed" }}>
                     <tbody>
@@ -300,6 +301,7 @@ export class Home extends Component {
                           </span>
                         </td>
                         <td style={{ fontSize: "1.4rem" }}>{flight.to}</td>
+                        <td style={{ fontSize: "1.4rem" }}>{flight.time}</td>
                         <td style={{ fontSize: "1.4rem" }}>
                           {/* <span style={{ float: "right" }}> */}
                           &#8377;{flight.fare}

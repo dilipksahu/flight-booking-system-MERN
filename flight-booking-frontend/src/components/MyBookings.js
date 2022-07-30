@@ -74,9 +74,9 @@ class MyFlights extends Component {
     this.setState({ loadingCheckIn: true });
 
     axios
-      .post("http://localhost:9100/create-pdf", booking)
+      .post("http://localhost:3000/create-pdf", booking)
       .then(() =>
-        axios.get("http://localhost:9100/fetch-pdf", {
+        axios.get("http://localhost:3000/fetch-pdf", {
           responseType: "blob",
         })
       )

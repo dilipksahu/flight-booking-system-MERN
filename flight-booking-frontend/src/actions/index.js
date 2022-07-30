@@ -19,10 +19,12 @@ import {
   CLEAR_FLIGHT_ERROR,
 } from "./types";
 
+const BASE_URL = 'http://localhost:3000/';
+
 export const oauthGoogle = (data) => {
   return async (dispatch) => {
     console.log(data);
-    const res = await axios.post("http://localhost:9300/google", {
+    const res = await axios.post(BASE_URL+"google", {
       access_token: data,
     });
     console.log(res);
@@ -39,7 +41,7 @@ export const oauthGoogle = (data) => {
 export const oauthFacebook = (data) => {
   return async (dispatch) => {
     console.log(data);
-    const res = await axios.post("http://localhost:9300/facebook", {
+    const res = await axios.post(BASE_URL+"facebook", {
       access_token: data,
     });
     console.log(res.data.newUser.userDetails);
@@ -60,7 +62,7 @@ export const signUp = (data) => {
         email: data.email,
         password: data.password1,
       };
-      const res = await axios.post("http://localhost:9200/signup", user);
+      const res = await axios.post(BASE_URL+"signup", user);
       console.log(res);
       dispatch({
         type: AUTH_SIGN_UP,
@@ -83,7 +85,7 @@ export const signUp = (data) => {
 export const signIn = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post("http://localhost:9300/signin", data);
+      const res = await axios.post(BASE_URL+"signin", data);
       console.log(res);
       dispatch({
         type: AUTH_SIGN_IN,
@@ -188,7 +190,7 @@ export const storeFlight = (flightId) => {
   console.log(flightId);
   return async (dispatch) => {
     try {
-      const res = await axios.get("http://localhost:9000/flights/" + flightId);
+      const res = await axios.get(BASE_URL+"flights/" + flightId);
       console.log(res.data);
       const flight = res.data;
       dispatch({
@@ -208,7 +210,7 @@ export const storeFlight = (flightId) => {
 export const getSecret = () => {
   return async (dispatch) => {
     try {
-      const res = await axios.get("http://localhost:9300/secret");
+      const res = await axios.get(BASE_URL+"secret");
       console.log(res);
       dispatch({
         type: GET_SECRET,
@@ -257,7 +259,7 @@ export const cancelBooking = (bookingId) => {
   return async (dispatch) => {
     try {
       const res = await axios.delete(
-        "http://localhost:9100/bookings/" + bookingId
+        BASE_URL+"bookings/" + bookingId
       );
       console.log(res.data.success);
       dispatch({
@@ -279,7 +281,7 @@ export const searchFlight = (data) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        "http://localhost:9000/flights/search",
+        BASE_URL+"flights/search",
         data
       );
       console.log(res.data);
@@ -313,7 +315,7 @@ export const addUserDetails = (userId, formData) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        "http://localhost:9200/users/" + userId,
+        BASE_URL+"users/" + userId,
         formData
       );
       console.log(res.data);
@@ -331,7 +333,7 @@ export const addUserDetails = (userId, formData) => {
 export const fetchUserDetails = (userId) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get("http://localhost:9200/users/" + userId);
+      const res = await axios.get(BASE_URL+"users/" + userId);
       console.log(res.data);
 
       dispatch({
@@ -353,7 +355,7 @@ export const getBookings = (userDetailId) => {
   return async (dispatch) => {
     try {
       const res = await axios.get(
-        "http://localhost:9100/bookings/userDetails/" + userDetailId
+        BASE_URL+"bookings/userDetails/" + userDetailId
       );
       console.log(res.data);
       dispatch({
@@ -375,7 +377,7 @@ export const bookFlight = (user, flight) => {
   return async (dispatch) => {
     try {
       console.log(user, flight);
-      const res = await axios.post("http://localhost:9100/bookings", {
+      const res = await axios.post(BASE_URL+"bookings", {
         user,
         flight,
       });
