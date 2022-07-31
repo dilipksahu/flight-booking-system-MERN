@@ -27,7 +27,7 @@ function Flights() {
       field: "to",
     },
     { title: "Date", field: "date", type: "date" },
-
+    { title: "Time", field: "time", type: "string" },
     { title: "Fare", field: "fare", type: "numeric" },
     // {
     //   title: "Birth Place",
@@ -70,6 +70,9 @@ function Flights() {
     }
     if (newData.date === "") {
       errorList.push("Please enter date");
+    }
+    if (newData.time === "") {
+      errorList.push("Please enter time");
     }
     if (newData.fare === "") {
       errorList.push("Please enter fare");
@@ -116,6 +119,9 @@ function Flights() {
     }
     if (newData.date === "") {
       errorList.push("Please enter date");
+    }
+    if (newData.time === "") {
+      errorList.push("Please enter time");
     }
     if (newData.fare === "") {
       errorList.push("Please enter fare");
