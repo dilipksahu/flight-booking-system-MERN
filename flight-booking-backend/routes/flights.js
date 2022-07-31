@@ -86,6 +86,7 @@ router.route("/").post((req, res) => {
  *         description: The flight ID
  */
 router.route("/:id").get((req, res) => {
+  console.log("req.params",req.params)
   Flight.findById(req.params.id)
     .then((flight) => res.status(200).json(flight))
     .catch((err) => res.status(500).json("Error: " + err));

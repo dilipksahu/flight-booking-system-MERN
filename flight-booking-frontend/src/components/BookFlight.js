@@ -183,6 +183,9 @@ class BookFlight extends Component {
                         <td style={{ fontSize: "1.8rem" }}>
                           {this.props.flight.date.substring(0, 10)}
                         </td>
+                        <td style={{ fontSize: "1.8rem" }}>
+                          {this.props.flight.time.substring(0, 10)}
+                        </td>
                       </tr>
                     </tbody>
                   </table>

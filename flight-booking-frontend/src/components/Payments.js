@@ -49,31 +49,34 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
     const data = await api.post("/razorpay", { fare });
     //   .then((t) => t.json());
 
-    console.log(data.data.amount);
-
-    const options = {
-      key: process.env.KEY_ID,
-      currency: data.data.currency,
-      amount: data.data.amount.toString(),
-      order_id: data.data.id,
-      name: "Flight Booking",
-      description: "Complete payment to book the flight",
-      //   image: "http://localhost:1337/logo.svg",
-      handler: async function (response) {
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-        console.log(userDetails._id);
-        await clearBooking();
+    console.log("$$$$",data.data.amount);
+    await clearBooking();
         await bookFlight(userDetails, flight);
         history.push("/successpage");
-      },
-      prefill: {
-        email: getEmail(),
-      },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+    // const options = {
+    //   key: process.env.KEY_ID,
+    //   currency: data.data.currency,
+    //   amount: data.data.amount.toString(),
+    //   order_id: data.data.id,
+    //   name: "Flight Booking",
+    //   description: "Complete payment to book the flight",
+    //   //   image: "http://localhost:1337/logo.svg",
+    //   handler: async function (response) {
+    //     alert()
+    //     // alert(response.razorpay_payment_id);
+    //     // alert(response.razorpay_order_id);
+    //     // alert(response.razorpay_signature);
+    //     console.log(userDetails._id);
+    //     await clearBooking();
+    //     await bookFlight(userDetails, flight);
+    //     history.push("/successpage");
+    //   },
+    //   prefill: {
+    //     email: getEmail(),
+    //   },
+    // };
+    // const paymentObject = new window.Razorpay(options);
+    // paymentObject.open();
   }
   return (
     <div>

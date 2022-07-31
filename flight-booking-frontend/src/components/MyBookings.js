@@ -162,6 +162,9 @@ class MyFlights extends Component {
                               {booking.flight.date.substring(0, 10)}
                             </td>
                             <td style={{ fontSize: "1.2rem" }}>
+                              {booking.flight.time.substring(0, 10)}
+                            </td>
+                            <td style={{ fontSize: "1.2rem" }}>
                               {/* <span style={{ float: "right" }}> */}
                               &#8377;{booking.flight.fare}
                               {/* </span> */}

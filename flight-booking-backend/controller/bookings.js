@@ -8,10 +8,10 @@ const crypto = require("crypto");
 var customId = require("custom-id");
 require("dotenv").config();
 
-// var instance = new Razorpay({
-  // key_id: process.env.KEY_ID,
-  // key_secret: process.env.KEY_SECRET,
-// });
+var instance = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET,
+});
 
 module.exports = {
   getAllBookings: async (req, res, next) => {
@@ -83,7 +83,7 @@ module.exports = {
         receipt,
         payment_capture,
       });
-      console.log(response);
+      console.log("@@@@@",response);
       res.status(200).json({
         id: response.id,
         currency: response.currency,
