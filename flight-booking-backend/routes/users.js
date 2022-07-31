@@ -5,6 +5,8 @@ require("../passport");
 const authenticate = (strategy) =>
   passport.authenticate(`${strategy}`, { session: false });
 
+router.route("/").get(UserController.welcome);
+
 router.route("/signup").post(UserController.signUp);
 
 router.route("/signin").post(authenticate("local"), UserController.signIn);

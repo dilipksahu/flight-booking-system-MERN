@@ -59,4 +59,8 @@ module.exports = {
     const newUser = req.user;
     res.status(200).json({ token, newUser });
   },
+
+  welcome: async (req, res, next) =>{
+    res.send("Welcome To Online Flight Booking App");
+  },
 };
