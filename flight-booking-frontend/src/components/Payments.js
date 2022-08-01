@@ -25,7 +25,7 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
   let history = useHistory();
 
   const api = axios.create({
-    baseURL: `http://localhost:3000/bookings`,
+    baseURL: `https://online-flight-book-system.herokuapp.com/bookings`,
   });
   function getEmail() {
     if (user.method === "local") {

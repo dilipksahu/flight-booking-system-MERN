@@ -74,9 +74,9 @@ class MyFlights extends Component {
     this.setState({ loadingCheckIn: true });
 
     axios
-      .post("http://localhost:3000/create-pdf", booking)
+      .post("https://online-flight-book-system.herokuapp.com/create-pdf", booking)
       .then(() =>
-        axios.get("http://localhost:3000/fetch-pdf", {
+        axios.get("https://online-flight-book-system.herokuapp.com/fetch-pdf", {
           responseType: "blob",
         })
       )

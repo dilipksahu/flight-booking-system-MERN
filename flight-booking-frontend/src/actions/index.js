@@ -19,7 +19,7 @@ import {
   CLEAR_FLIGHT_ERROR,
 } from "./types";
 
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = 'https://online-flight-book-system.herokuapp.com/';
 
 export const oauthGoogle = (data) => {
   return async (dispatch) => {

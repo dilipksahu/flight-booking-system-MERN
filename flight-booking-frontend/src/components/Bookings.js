@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 
 const api = axios.create({
-  baseURL: `http://localhost:3000/bookings`,
+  baseURL: `https://online-flight-book-system.herokuapp.com/bookings`,
 });
 
 function Flights() {
