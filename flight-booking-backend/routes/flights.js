@@ -1,5 +1,6 @@
 const router = require("express").Router();
 let Flight = require("../models/flight");
+let Booking = require("../models/booking");
 
 /**
  * @swagger
@@ -15,8 +16,11 @@ let Flight = require("../models/flight");
  */
 router.route("/").get((req, res) => {
   Flight.find()
-    .then((flights) => res.status(200).json(flights))
-    .catch((err) => res.status(500).json("Error: " + err));
+    .then((flights) => {
+      console.log("------ all flights ", flights)
+      // Booking.count()
+      res.status(200).json(flights)
+    }).catch((err) => res.status(500).json("Error: " + err));
 });
 
 /**
@@ -57,7 +61,7 @@ router.route("/").get((req, res) => {
  *           description: Server error
  */
 router.route("/").post((req, res) => {
-  console.log("flight",req.body)
+  console.log("flight", req.body)
   const newFlight = new Flight(req.body);
 
   newFlight
@@ -86,7 +90,7 @@ router.route("/").post((req, res) => {
  *         description: The flight ID
  */
 router.route("/:id").get((req, res) => {
-  console.log("req.params",req.params)
+  console.log("req.params", req.params)
   Flight.findById(req.params.id)
     .then((flight) => res.status(200).json(flight))
     .catch((err) => res.status(500).json("Error: " + err));
@@ -174,7 +178,7 @@ router.route("/:id").patch((req, res) => {
  *         description: Journey date
  */
 router.route("/search").post((req, res) => {
-  console.log("flight search",req.body)
+  console.log("flight search", req.body)
   const from = req.body.from;
   const to = req.body.to;
   const startDate = Date.parse(req.body.date);
@@ -182,7 +186,18 @@ router.route("/search").post((req, res) => {
   console.log(endDate);
   Flight.find({ from, to, date: { $gte: startDate, $lt: endDate } })
     .exec()
-    .then((flights) => res.status(200).json(flights))
+    .then(async (flights) => {
+      let flightResult = [];
+      for (let flt of flights){
+        let bookingCount = await Booking.count({
+          flight: flt._id,
+        })
+        if (bookingCount <= 180){
+          flightResult = [...flightResult,flt]
+        }
+      }
+      res.status(200).json(flightResult)
+    })
     .catch((err) => res.status(500).json("Error: " + err));
 });
 

@@ -72,11 +72,13 @@ class MyFlights extends Component {
 
   createAndDownloadPdf = (booking) => {
     this.setState({ loadingCheckIn: true });
+    // const SERVER_URL = 'https://online-flight-book-system.herokuapp.com/';
+    const SERVER_URL = 'http://localhost:3000/';
 
     axios
-      .post("https://online-flight-book-system.herokuapp.com/create-pdf", booking)
+      .post(SERVER_URL+"create-pdf", booking)
       .then(() =>
-        axios.get("https://online-flight-book-system.herokuapp.com/fetch-pdf", {
+        axios.get(SERVER_URL+"fetch-pdf", {
           responseType: "blob",
         })
       )

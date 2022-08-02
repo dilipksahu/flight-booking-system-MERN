@@ -4,8 +4,11 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 
+// const SERVER_URL = 'https://online-flight-book-system.herokuapp.com/';
+const SERVER_URL = 'http://localhost:3000/';
+
 const api = axios.create({
-  baseURL: `https://online-flight-book-system.herokuapp.com/flights`,
+  baseURL: SERVER_URL,
 });
 
 function Flights() {

@@ -11,6 +11,10 @@ var bookingSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Flight",
   },
+  holdingPrice:{
+    type: String,
+    required: false,
+  }
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

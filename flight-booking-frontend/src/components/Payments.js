@@ -24,8 +24,11 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
   const fare = flight.fare;
   let history = useHistory();
 
+  // const SERVER_URL = 'https://online-flight-book-system.herokuapp.com/';
+  const SERVER_URL = 'http://localhost:3000/';
+
   const api = axios.create({
-    baseURL: `https://online-flight-book-system.herokuapp.com/bookings`,
+    baseURL: SERVER_URL+"bookings",
   });
   function getEmail() {
     if (user.method === "local") {
