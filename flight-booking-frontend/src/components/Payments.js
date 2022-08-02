@@ -20,8 +20,8 @@ function loadScript(src) {
   });
 }
 
-function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
-  const fare = flight.fare;
+function Payments({ flight, user, userDetails, bookFlight, clearBooking, holdFare}) {
+  const fare = holdFare ? holdFare : flight.fare;
   let history = useHistory();
 
   // const SERVER_URL = 'https://online-flight-book-system.herokuapp.com/';
@@ -54,6 +54,7 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
 
     console.log("$$$$",data.data.amount);
     await clearBooking();
+        console.log(" displayRazorpay flight ",flight)
         await bookFlight(userDetails, flight);
         history.push("/successpage");
     // const options = {
@@ -110,6 +111,7 @@ function mapStateToProps(state) {
     flight: state.flight.flight,
     user: state.auth.user,
     userDetails: state.flight.userDetails,
+    holdFare: state.flight.holdFare,
   };
 }
 

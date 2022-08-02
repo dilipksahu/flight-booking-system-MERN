@@ -168,7 +168,7 @@ class MyFlights extends Component {
                             </td>
                             <td style={{ fontSize: "1.2rem" }}>
                               {/* <span style={{ float: "right" }}> */}
-                              &#8377;{booking.flight.fare}
+                              &#8377;{booking.holdingFare ? booking.holdingFare : booking.flight.fare}
                               {/* </span> */}
                             </td>
                           </tr>

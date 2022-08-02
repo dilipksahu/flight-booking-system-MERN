@@ -33,6 +33,9 @@ class SignIn extends Component {
     console.log(res);
     if (res) {
       await this.props.signIn(formData);
+      if (this.props.user && this.props.user.userDetails){
+        await this.props.userHoldFlight(this.props.user.userDetails, this.props.flight._id, true)
+      }
     }
     if (!this.props.errorMessage) {
       this.redirect();
@@ -62,6 +65,7 @@ class SignIn extends Component {
 
   render() {
     const { handleSubmit } = this.props;
+
     return (
       <div className="row">
         <div className="col">

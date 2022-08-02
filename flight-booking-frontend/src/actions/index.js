@@ -17,6 +17,8 @@ import {
   GET_BOOKINGS,
   CANCEL_BOOKING,
   CLEAR_FLIGHT_ERROR,
+  FLIGHT_HOLD,
+  STORE_FLIGHT_FARE,
 } from "./types";
 
 // const SERVER_URL = 'https://online-flight-book-system.herokuapp.com/';
@@ -26,7 +28,7 @@ const BASE_URL = SERVER_URL;
 export const oauthGoogle = (data) => {
   return async (dispatch) => {
     console.log(data);
-    const res = await axios.post(BASE_URL+"google", {
+    const res = await axios.post(BASE_URL + "google", {
       access_token: data,
     });
     console.log(res);
@@ -43,7 +45,7 @@ export const oauthGoogle = (data) => {
 export const oauthFacebook = (data) => {
   return async (dispatch) => {
     console.log(data);
-    const res = await axios.post(BASE_URL+"facebook", {
+    const res = await axios.post(BASE_URL + "facebook", {
       access_token: data,
     });
     console.log(res.data.newUser.userDetails);
@@ -64,7 +66,7 @@ export const signUp = (data) => {
         email: data.email,
         password: data.password1,
       };
-      const res = await axios.post(BASE_URL+"signup", user);
+      const res = await axios.post(BASE_URL + "signup", user);
       console.log(res);
       dispatch({
         type: AUTH_SIGN_UP,
@@ -87,7 +89,7 @@ export const signUp = (data) => {
 export const signIn = (data) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post(BASE_URL+"signin", data);
+      const res = await axios.post(BASE_URL + "signin", data);
       console.log(res);
       dispatch({
         type: AUTH_SIGN_IN,
@@ -192,7 +194,7 @@ export const storeFlight = (flightId) => {
   console.log(flightId);
   return async (dispatch) => {
     try {
-      const res = await axios.get(BASE_URL+"flights/" + flightId);
+      const res = await axios.get(BASE_URL + "flights/" + flightId);
       console.log(res.data);
       const flight = res.data;
       dispatch({
@@ -212,7 +214,7 @@ export const storeFlight = (flightId) => {
 export const getSecret = () => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(BASE_URL+"secret");
+      const res = await axios.get(BASE_URL + "secret");
       console.log(res);
       dispatch({
         type: GET_SECRET,
@@ -261,7 +263,7 @@ export const cancelBooking = (bookingId) => {
   return async (dispatch) => {
     try {
       const res = await axios.delete(
-        BASE_URL+"bookings/" + bookingId
+        BASE_URL + "bookings/" + bookingId
       );
       console.log(res.data.success);
       dispatch({
@@ -283,7 +285,7 @@ export const searchFlight = (data) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        BASE_URL+"flights/search",
+        BASE_URL + "flights/search",
         data
       );
       console.log(res.data);
@@ -317,7 +319,7 @@ export const addUserDetails = (userId, formData) => {
   return async (dispatch) => {
     try {
       const res = await axios.post(
-        BASE_URL+"users/" + userId,
+        BASE_URL + "users/" + userId,
         formData
       );
       console.log(res.data);
@@ -335,7 +337,7 @@ export const addUserDetails = (userId, formData) => {
 export const fetchUserDetails = (userId) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(BASE_URL+"users/" + userId);
+      const res = await axios.get(BASE_URL + "users/" + userId);
       console.log(res.data);
 
       dispatch({
@@ -357,7 +359,7 @@ export const getBookings = (userDetailId) => {
   return async (dispatch) => {
     try {
       const res = await axios.get(
-        BASE_URL+"bookings/userDetails/" + userDetailId
+        BASE_URL + "bookings/userDetails/" + userDetailId
       );
       console.log(res.data);
       dispatch({
@@ -379,7 +381,7 @@ export const bookFlight = (user, flight) => {
   return async (dispatch) => {
     try {
       console.log(user, flight);
-      const res = await axios.post(BASE_URL+"bookings", {
+      const res = await axios.post(BASE_URL + "bookings", {
         user,
         flight,
       });
@@ -396,5 +398,63 @@ export const bookFlight = (user, flight) => {
       });
       console.log(error);
     }
+  };
+}; 
+
+export const holdFlight = (user, flight, holdingStatus) => {
+  return async (dispatch) => {
+    try {
+      console.log(user, flight, holdingStatus);
+      const res = await axios.post(BASE_URL + "bookings", {
+        user,
+        flight,
+        holdingStatus,
+      });
+      dispatch({
+        type: FLIGHT_BOOK,
+        payload: res.data,
+      });
+      console.log(res.data);
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "holding failed",
+      });
+      console.log(error);
+    }
+  };
+};
+export const userHoldFlight = (user, flight, holdingStatus) => {
+  return async (dispatch) => {
+    try {
+      console.log(user, flight, holdingStatus);
+      const res = await axios.post(BASE_URL + "bookings/userwiseHolding", {
+        user,
+        flight,
+        holdingStatus,
+      });
+      dispatch({
+        type: FLIGHT_HOLD,
+        payload: res.data,
+      });
+      console.log(res.data);
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "holding failed",
+      });
+      console.log(error);
+    }
+  };
+};
+export const storeFlightFare = (data) => {
+  return (dispatch) => {
+    console.log(data);
+    dispatch({
+      type: STORE_FLIGHT_FARE,
+      payload: data,
+    });
   };
 };

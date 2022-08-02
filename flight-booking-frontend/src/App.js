@@ -16,6 +16,7 @@ import Flights from "./components/Flights";
 import Payments from "./components/Payments";
 import SuccessPage from "./components/SuccessPage";
 import CancelPage from "./components/CancelPage";
+import SuccessHoldingPage from "./components/SuccessHoldingPage";
 import reducers from "./reducers";
 
 import authGuard from "./components/authGuard";
@@ -76,6 +77,12 @@ function App() {
               exact
               strict
               component={authGuard(SuccessPage)}
+            />
+            <Route
+              path="/successholdingpage"
+              exact
+              strict
+              component={authGuard(SuccessHoldingPage)}
             />
             <Route
               path="/cancelpage"

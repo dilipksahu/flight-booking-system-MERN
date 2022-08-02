@@ -142,13 +142,16 @@ export class Home extends Component {
     // }
   }
 
-  bookNow(flightId) {
+  async bookNow(flightId) {
     this.props.storeFlight(flightId);
 
     if (!this.props.isAuth) {
       // this.props.storeFlight(flightId);
       this.handleShow();
     } else {
+      if (this.props.user && this.props.user.userDetails){
+        await this.props.userHoldFlight(this.props.user.userDetails, flightId, true)
+      }
       this.props.history.push("/book");
     }
   }
@@ -358,6 +361,7 @@ function mapStateToProps(state) {
     isAuth: state.auth.isAuthenticated,
     flights: state.flight.flights,
     errorMessage: state.flight.errorMessage,
+    user: state.auth.user,
   };
 }
 // Home = connect((state) => ({

@@ -43,6 +43,7 @@ router
    *         description: Return saved booking
    */
   .post(BookingsController.addNewBooking);
+  
 
 router
   .route("/:bookingId")
@@ -66,6 +67,25 @@ router
   *         description: The booking ID
   */
   .get(BookingsController.getBookingById)
+  /**
+   * @swagger
+   * /bookings/(id):
+   *   patch:
+   *     tags:
+   *       - Booking
+   *     description: Update booking details for a holding booking
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: updateholdingBooking
+   *         description: Booking object
+   *         in: body
+   *         required: true
+   *     responses:
+   *       201:
+   *         description: Return updated booking
+   */
+  .patch(BookingsController.updateBooking)
   /** 
   * @swagger
   * /bookings/{id}:
@@ -85,7 +105,7 @@ router
  *         type: String
  *         description: The booking ID
  */
-  .delete(BookingsController.cancelBooking);
+  .delete (BookingsController.cancelBooking);
 
 router
   .route("/userDetails/:userDetailId")
@@ -112,4 +132,5 @@ router
 
 router.route("/razorpay").post(BookingsController.payment);
 router.route("/verification").post(BookingsController.verifyPayment);
+router.route("/userwiseHolding").post(BookingsController.getUserWiseHoldingDetails);
 module.exports = router;

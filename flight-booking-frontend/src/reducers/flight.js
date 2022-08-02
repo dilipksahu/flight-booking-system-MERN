@@ -9,6 +9,8 @@ import {
   GET_BOOKINGS,
   CANCEL_BOOKING,
   CLEAR_FLIGHT_ERROR,
+  FLIGHT_HOLD,
+  STORE_FLIGHT_FARE,
 } from "../actions/types";
 
 const DEFAULT_STATE = {
@@ -19,6 +21,8 @@ const DEFAULT_STATE = {
   userDetails: {},
   cancelBooking: false,
   errorMessage: "",
+  holding: [],
+  holdFare: null,
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -38,6 +42,12 @@ export default (state = DEFAULT_STATE, action) => {
         ...state,
         flights: [],
         booking: action.payload,
+      };
+    case FLIGHT_HOLD:
+      return {
+        ...state,
+        flights: [],
+        holding: action.payload,
       };
     case GET_BOOKINGS:
       return {
@@ -63,7 +73,12 @@ export default (state = DEFAULT_STATE, action) => {
     case STORE_USER_DETAILS:
       return {
         ...state,
-        userDetails: action.payload,
+        userDetails: action.payload, 
+      };
+    case STORE_FLIGHT_FARE:
+      return {
+        ...state,
+        holdFare: action.payload,
       };
     case CLEAR_FLIGHT:
       return {
@@ -72,6 +87,7 @@ export default (state = DEFAULT_STATE, action) => {
         flightId: {},
         booking: {},
         userDetails: {},
+        holding: [],
       };
     case FLIGHT_ERROR:
       return { ...state, errorMessage: action.payload };

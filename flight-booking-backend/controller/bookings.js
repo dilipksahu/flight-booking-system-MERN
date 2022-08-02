@@ -28,8 +28,10 @@ module.exports = {
   addNewBooking: async (req, res, next) => {
     const userId = req.body.user;
     const flightId = req.body.flight;
+    let holdingStatus = req.body.holdingStatus;
+    let existBooking;
     console.log(userId, flightId);
-    // const newBooking = new Booking({ userId, flightId });
+    // const existBooking = new Booking({ userId, flightId });
     // const booking = await newBooking.save();
     const flight = await Flight.findById(flightId);
     const user = await User.findById(userId);
@@ -38,13 +40,59 @@ module.exports = {
       email: user.firstName + user.lastName,
     });
     console.log(bookingId);
-    user.flights.push(flight);
-    await user.save();
+    if (holdingStatus) {
+      const holdingStatus = req.body.holdingStatus;
+      const holdingFare = flight.fare
+      const newBooking = new Booking({ bookingId, flight, user, holdingStatus, holdingFare });
+      const booking = await newBooking.save();
+      console.log(booking);
+      return res.status(200).json(booking);
+    } else {
+      let holdingStatus = true;
+      existBooking = await Booking.find({ user, flight, holdingStatus });
+      if (existBooking) {
+        let holdBooking = existBooking[0];
+        const updateBooking = await Booking.findByIdAndUpdate({
+            _id: holdBooking._id
+          },
+          {
+            holdingStatus: false,
+          });
+        console.log("---- updateBooking ", updateBooking)
+        if (updateBooking) {
+          user.flights.push(flight);
+          await user.save();
+          holdBooking.holdingStatus = false;
+          return res.status(200).json(holdBooking);
+        }
+      }
+      user.flights.push(flight);
+      await user.save();
 
-    const newBooking = new Booking({ bookingId, flight, user });
-    const booking = await newBooking.save();
-    console.log(booking);
-    res.status(201).json(booking);
+      const newBooking = new Booking({ bookingId, flight, user });
+      const booking = await newBooking.save();
+      console.log(booking);
+      res.status(200).json(booking);
+    }
+  },
+
+  updateBooking: async (bookingId) => {
+    // const bookingId = req.params.id;
+    let booking = await Booking.findById(bookingId);
+    const updateBooking = await Booking.updateOne({
+      bookingId
+    },
+      {
+        $set: {
+          holdingStatus: false,
+        }
+      })
+    if (updateBooking) {
+      user.flights.push(flight);
+      await user.save();
+      booking.holdingStatus = false;
+      res.status(201).json(booking);
+    }
   },
 
   cancelBooking: async (req, res, next) => {
@@ -69,6 +117,14 @@ module.exports = {
     res.status(200).json(bookings);
   },
 
+  getUserWiseHoldingDetails: async (req, res, next) => {
+    const { user, flight, holdingStatus } = req.body;
+    const bookings = await Booking.find({ user: { $in: user }, flight, holdingStatus })
+      .populate("flight")
+      .populate("user");
+    res.status(200).json(bookings);
+  },
+
   payment: async (req, res, next) => {
     console.log(req.body.fare);
     const payment_capture = 1;
@@ -83,7 +139,7 @@ module.exports = {
         receipt,
         payment_capture,
       });
-      console.log("@@@@@",response);
+      console.log("@@@@@", response);
       res.status(200).json({
         id: response.id,
         currency: response.currency,

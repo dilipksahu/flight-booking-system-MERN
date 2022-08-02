@@ -11,8 +11,12 @@ var bookingSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Flight",
   },
-  holdingPrice:{
-    type: String,
+  holdingStatus: {
+    type: Boolean,
+    default: false,
+  },
+  holdingFare:{
+    type: Number,
     required: false,
   }
 });

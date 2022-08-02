@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useReducer } from "react";
 import { Button, Alert, Card, Modal, Breadcrumb, Table } from "react-bootstrap";
 import { reduxForm, Field } from "redux-form";
 import { compose } from "redux";
@@ -15,8 +15,9 @@ class BookFlight extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onClick = this.onClick.bind(this);
     this.confirmFlight = this.confirmFlight.bind(this);
+    this.holdFlightFare = this.holdFlightFare.bind(this);
 
-    this.state = { showForm: false, show: false, userDetails: {} };
+    this.state = { showForm: false, show: false, userDetails: {}, holding: false };
     // console.log(this.props.user.userDetails);
   }
 
@@ -26,8 +27,16 @@ class BookFlight extends Component {
 
   async bookFlight(userDetails) {
     console.log(userDetails._id);
-    await this.setState({ userDetails });
+    await this.setState({ userDetails , holding : false});
     this.props.storeUserDetails(userDetails);
+    this.props.storeFlightFare(null)
+    this.handleShow();
+  }
+  async holdFlight(userDetails,holdFare=null) {
+    console.log(userDetails._id);
+    await this.setState({ userDetails, holding: holdFare ? false : true });
+    this.props.storeUserDetails(userDetails);
+    this.props.storeFlightFare(holdFare)
     this.handleShow();
   }
   async confirmFlight() {
@@ -38,6 +47,14 @@ class BookFlight extends Component {
     // );
     // this.props.history.push("/successpage");
     this.props.history.push("/payments");
+  }
+  async holdFlightFare() {
+    await this.props.holdFlight(
+      this.state.userDetails._id,
+      this.props.flight._id,
+      true,
+    );
+    this.props.history.push("/successholdingpage");
   }
   async loadPassengers() {
     if (this.props.user) {
@@ -63,7 +80,7 @@ class BookFlight extends Component {
   }
   render() {
     const { handleSubmit } = this.props;
-
+    
     return (
       <div>
         <Breadcrumb>
@@ -95,8 +112,9 @@ class BookFlight extends Component {
                   <Card.Text>
                     From : {this.props.flight.from} To : {this.props.flight.to}
                     <br />
-                    Fare : &#8377;{this.props.flight.fare} <br />
-                    Date : {this.props.flight.date.substring(0, 10)}
+                    Fare : &#8377;{this.props.holdFare ? this.props.holdFare : this.props.flight.fare} <br />
+                    Date : {this.props.flight.date.substring(0, 10)}<br />
+                    Time : {this.props.flight.time.substring(0, 10)}
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -118,10 +136,15 @@ class BookFlight extends Component {
               <Button variant="secondary" onClick={this.handleClose}>
                 Cancel
               </Button>
-
-              <Button variant="primary" onClick={this.confirmFlight}>
-                Confirm
-              </Button>
+              {this.state.holding ?
+                <Button variant="primary" onClick={this.holdFlightFare}>
+                  Hold Fare
+                </Button>
+                :
+                <Button variant="primary" onClick={this.confirmFlight}>
+                  Confirm
+                </Button>
+              }
             </Modal.Footer>
           </Modal>
         ) : null}
@@ -216,6 +239,7 @@ class BookFlight extends Component {
                       <th>Name</th>
                       <th>Birthdate</th>
                       <th>Book</th>
+                      <th>Hold Price & Pay within 3 Hrs</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -230,6 +254,35 @@ class BookFlight extends Component {
                           >
                             Book
                           </Button>
+                        </td>
+                        <td>
+                          {this.props.holding && this.props.holding.length ? 
+                           <>
+                          { this.props.holding && this.props.holding.map((book) => 
+                            user._id === book.user._id ? 
+                            <Button
+                            variant="primary"
+                            onClick={() => this.holdFlight(user,book.holdingFare)}
+                            >
+                            Book on &#8377;{book.holdingFare}
+                            </Button>
+                            :
+                            <Button
+                            variant="primary"
+                            onClick={() => this.holdFlight(user)}
+                            >
+                            Hold
+                            </Button>
+                          )}
+                          </>
+                          :
+                          <Button
+                            variant="primary"
+                            onClick={() => this.holdFlight(user)}
+                            >
+                            Hold
+                            </Button>
+                          }
                         </td>
                       </tr>
                     ))}
@@ -315,6 +368,8 @@ function mapStateToProps(state) {
     flight: state.flight.flight,
     user: state.auth.user,
     userDetails: state.user.userDetails,
+    holding: state.flight.holding,
+    holdFare: state.flight.holdFare,
   };
 }
 
