@@ -17,22 +17,35 @@ class BookFlight extends Component {
     this.confirmFlight = this.confirmFlight.bind(this);
     this.holdFlightFare = this.holdFlightFare.bind(this);
 
-    this.state = { showForm: false, show: false, userDetails: {}, holding: false };
+    this.state = { showForm: false, show: false, userDetails: {}, holding: false ,alertPopup: false};
     // console.log(this.props.user.userDetails);
   }
 
   onClick() {
     this.setState({ showForm: true });
   }
+  
+  componentDidMount() {
+    setInterval(() => {
+      this.alertOnSeatAvailable()
+    }, 10000);
+  }
+
+  // componentWillUpdate() {
+  //   setInterval(this.alertOnSeatAvailable(), 3000);
+  // }
+  alertOnSeatAvailable() {
+    this.setState({alertPopup:true});
+  }
 
   async bookFlight(userDetails) {
     console.log(userDetails._id);
-    await this.setState({ userDetails , holding : false});
+    await this.setState({ userDetails, holding: false });
     this.props.storeUserDetails(userDetails);
     this.props.storeFlightFare(null)
     this.handleShow();
   }
-  async holdFlight(userDetails,holdFare=null) {
+  async holdFlight(userDetails, holdFare = null) {
     console.log(userDetails._id);
     await this.setState({ userDetails, holding: holdFare ? false : true });
     this.props.storeUserDetails(userDetails);
@@ -66,7 +79,7 @@ class BookFlight extends Component {
     }
   }
 
-  handleClose = () => this.setState({ show: false });
+  handleClose = () => this.setState({ show: false,alertPopup:false });
   handleShow = () => this.setState({ show: true });
 
   async onSubmit(formData) {
@@ -80,7 +93,7 @@ class BookFlight extends Component {
   }
   render() {
     const { handleSubmit } = this.props;
-    console.log("bookflght holding ",this.props.holding)
+    console.log("bookflght holding ", this.props.holding)
     return (
       <div>
         <Breadcrumb>
@@ -148,6 +161,16 @@ class BookFlight extends Component {
             </Modal.Footer>
           </Modal>
         ) : null}
+        {this.state.alertPopup ?
+          <Modal show={this.state.alertPopup} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Alert on Avaible Seat</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Last {Math.floor(Math.random() * (10 - 1 + 1) + 1)} seat are ramainings, Hurry up click book now</Modal.Body>
+            <Modal.Footer>
+            </Modal.Footer>
+          </Modal>
+          : null}
         <h1>Book Flight</h1>
         {this.props.flight.hasOwnProperty("_id") ? (
           <>
@@ -256,26 +279,26 @@ class BookFlight extends Component {
                           </Button>
                         </td>
                         <td>
-                          {this.props.holding && this.props.holding.length ? 
-                           <>
-                          { this.props.holding && this.props.holding.map((book) => 
-                            book.user._id === user._id ? 
-                            <Button
-                            variant="primary"
-                            onClick={() => this.holdFlight(user,book.holdingFare)}
-                            >
-                            Book on &#8377;{book.holdingFare}
-                            </Button>
+                          {this.props.holding && this.props.holding.length ?
+                            <>
+                              {this.props.holding && this.props.holding.map((book) =>
+                                book.user._id === user._id ?
+                                  <Button
+                                    variant="primary"
+                                    onClick={() => this.holdFlight(user, book.holdingFare)}
+                                  >
+                                    Book on &#8377;{book.holdingFare}
+                                  </Button>
+                                  :
+                                  (null)
+                              )}
+                            </>
                             :
-                            (null)
-                          )}
-                          </>
-                          :
-                          <Button
-                            variant="primary"
-                            onClick={() => this.holdFlight(user)}
+                            <Button
+                              variant="primary"
+                              onClick={() => this.holdFlight(user)}
                             >
-                            Hold
+                              Hold
                             </Button>
                           }
                         </td>

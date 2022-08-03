@@ -139,7 +139,8 @@ export const validateSearch = (data) => {
         return false;
       } else {
         console.log(Date.now());
-        if (Date.parse(data.date) < Date.now()) {
+        let date = new Date();
+        if (Date.parse(data.date) < date.setDate(date.getDate() - 1)) {
           dispatch({
             type: FLIGHT_ERROR,
             payload: "Past date is not allowed",

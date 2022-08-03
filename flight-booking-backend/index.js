@@ -20,13 +20,15 @@ const flightsRouter = require("./routes/flights");
 const bookingsRouter = require("./routes/bookings");
 
 // Cron
+// Runs every 10 mins
 const cancelHoldBook = require('./crons/HoldBookingCancel');
-// let cancelHoldBookingCron = cron.schedule('* */10 * * * *', cancelHoldBook);
-// cancelHoldBookingCron.start();
+let cancelHoldBookingCron = cron.schedule('0 */10 * * * *', cancelHoldBook);
+cancelHoldBookingCron.start();
 
+// Runs every 01 hours
 const flightPriceIncrease = require('./crons/FlightPriceIncrease');
-// let flightPriceIncreaseCron = cron.schedule('*/1 * * * * *', flightPriceIncrease);
-// flightPriceIncreaseCron.start();
+let flightPriceIncreaseCron = cron.schedule('0 0 */1 * * *', flightPriceIncrease);
+flightPriceIncreaseCron.start();
 
 const app = express();
 dotenv.config();
@@ -44,7 +46,7 @@ const swaggerOptions = {
       title: "User Details API",
       description: "It contains information of the traveller ",
       contact: {
-        name: "Pranav Karmarkar",
+        name: "Dilip Sahu",
       },
       servers: ["http://localhost:" + process.env.PORT],
     },

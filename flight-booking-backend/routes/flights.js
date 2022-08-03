@@ -15,14 +15,7 @@ const FlightController = require("../controller/flights");
  *      '500':
  *        description: Server error
  */
-router.route("/").get((req, res) => {
-  Flight.find()
-    .then((flights) => {
-      console.log("------ all flights ", flights)
-      // Booking.count()
-      res.status(200).json(flights)
-    }).catch((err) => res.status(500).json("Error: " + err));
-});
+router.route("/").get(FlightController.getFlights);
 
 /**
  * @swagger
@@ -82,12 +75,7 @@ router.route("/").post(FlightController.addNewFlights);
  *         type: String
  *         description: The flight ID
  */
-router.route("/:id").get((req, res) => {
-  console.log("req.params", req.params)
-  Flight.findById(req.params.id)
-    .then((flight) => res.status(200).json(flight))
-    .catch((err) => res.status(500).json("Error: " + err));
-});
+router.route("/:id").get(FlightController.getFlights);
 
 /**
  * @swagger
@@ -177,12 +165,27 @@ router.route("/search").post((req, res) => {
     .exec()
     .then(async (flights) => {
       let flightResult = [];
-      for (let flt of flights){
+      for (let flt of flights) {
         let bookingCount = await Booking.count({
           flight: flt._id,
         })
-        if (bookingCount <= 180){
-          flightResult = [...flightResult,flt]
+        if (bookingCount <= 180) {
+          let date = new Date(flt.date);
+          date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+          let time = new Date(flt.time);
+          time = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+          console.log("data ", date, "== time", time);
+          let eachFlight = {
+            _id: flt._id,
+            airlines: flt.airlines,
+            fare: flt.fare,
+            from: flt.from,
+            to: flt.to,
+            name: flt.name,
+            date: date,
+            time: time,
+          }
+          flightResult = [...flightResult, eachFlight]
         }
       }
       res.status(200).json(flightResult)
