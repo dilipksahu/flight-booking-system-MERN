@@ -30,7 +30,7 @@ function Flights() {
       field: "to",
     },
     { title: "Date", field: "date", type: "date" },
-    { title: "Time", field: "time", type: "string" },
+    { title: "Time", field: "time", type: "time" },
     { title: "Fare", field: "fare", type: "numeric" },
     // {
     //   title: "Birth Place",
@@ -131,6 +131,7 @@ function Flights() {
     }
 
     if (errorList.length < 1) {
+      console.log("--- flight newData",newData)
       //no error
       api
         .post("/", newData)

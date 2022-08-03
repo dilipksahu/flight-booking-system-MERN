@@ -21,8 +21,12 @@ const bookingsRouter = require("./routes/bookings");
 
 // Cron
 const cancelHoldBook = require('./crons/HoldBookingCancel');
-let cancelHoldBookingCron = cron.schedule('* */10 * * * *', cancelHoldBook);
-cancelHoldBookingCron.start();
+// let cancelHoldBookingCron = cron.schedule('* */10 * * * *', cancelHoldBook);
+// cancelHoldBookingCron.start();
+
+const flightPriceIncrease = require('./crons/FlightPriceIncrease');
+// let flightPriceIncreaseCron = cron.schedule('*/1 * * * * *', flightPriceIncrease);
+// flightPriceIncreaseCron.start();
 
 const app = express();
 dotenv.config();

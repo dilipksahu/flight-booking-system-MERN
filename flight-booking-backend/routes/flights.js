@@ -1,6 +1,7 @@
 const router = require("express").Router();
 let Flight = require("../models/flight");
 let Booking = require("../models/booking");
+const FlightController = require("../controller/flights");
 
 /**
  * @swagger
@@ -60,15 +61,7 @@ router.route("/").get((req, res) => {
  *         '500':
  *           description: Server error
  */
-router.route("/").post((req, res) => {
-  console.log("flight", req.body)
-  const newFlight = new Flight(req.body);
-
-  newFlight
-    .save()
-    .then((result) => res.status(200).json("Flight added!"))
-    .catch((err) => res.status(500).json("Error: " + err));
-});
+router.route("/").post(FlightController.addNewFlights);
 
 /**
  * @swagger
@@ -140,11 +133,7 @@ router.route("/:id").delete((req, res) => {
  *         type: String
  *         description: The flight ID
  */
-router.route("/:id").patch((req, res) => {
-  Flight.findByIdAndUpdate(req.params.id, req.body)
-    .then(res.status(200).json("Flight updated!"))
-    .catch((err) => res.status(500).json("Error: " + err));
-});
+router.route("/:id").patch(FlightController.updateFlight);
 
 /**
  * @swagger
