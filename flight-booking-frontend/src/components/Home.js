@@ -271,7 +271,7 @@ export class Home extends Component {
                       <tr>
                         <td style={{ fontSize: "1.4rem" }}>{flight.from}</td>
                         <td>
-                          <span class="plane">
+                          <span className="plane">
                             <svg
                               clip-rule="evenodd"
                               fill-rule="evenodd"

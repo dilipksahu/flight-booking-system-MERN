@@ -80,7 +80,7 @@ class BookFlight extends Component {
   }
   render() {
     const { handleSubmit } = this.props;
-    
+    console.log("bookflght holding ",this.props.holding)
     return (
       <div>
         <Breadcrumb>
@@ -259,7 +259,7 @@ class BookFlight extends Component {
                           {this.props.holding && this.props.holding.length ? 
                            <>
                           { this.props.holding && this.props.holding.map((book) => 
-                            user._id === book.user._id ? 
+                            book.user._id === user._id ? 
                             <Button
                             variant="primary"
                             onClick={() => this.holdFlight(user,book.holdingFare)}
@@ -267,12 +267,7 @@ class BookFlight extends Component {
                             Book on &#8377;{book.holdingFare}
                             </Button>
                             :
-                            <Button
-                            variant="primary"
-                            onClick={() => this.holdFlight(user)}
-                            >
-                            Hold
-                            </Button>
+                            (null)
                           )}
                           </>
                           :

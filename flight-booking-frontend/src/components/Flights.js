@@ -8,7 +8,7 @@ import Alert from "@material-ui/lab/Alert";
 const SERVER_URL = 'http://localhost:3000/';
 
 const api = axios.create({
-  baseURL: SERVER_URL,
+  baseURL: SERVER_URL+"flights",
 });
 
 function Flights() {

@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const pdf = require("html-pdf");
+const cron = require("node-cron");
 const pdfTemplate = require("./documents");
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -17,6 +18,11 @@ const userRouter = require("./routes/users");
 const userDetailsRouter = require("./routes/userDetails");
 const flightsRouter = require("./routes/flights");
 const bookingsRouter = require("./routes/bookings");
+
+// Cron
+const cancelHoldBook = require('./crons/HoldBookingCancel');
+let cancelHoldBookingCron = cron.schedule('* */10 * * * *', cancelHoldBook);
+cancelHoldBookingCron.start();
 
 const app = express();
 dotenv.config();

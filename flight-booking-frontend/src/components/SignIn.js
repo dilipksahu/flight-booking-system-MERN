@@ -17,11 +17,14 @@ class SignIn extends Component {
     this.responseFacebook = this.responseFacebook.bind(this);
   }
 
-  redirect() {
+  async redirect() {
     if (this.props.user.userType == "admin") {
       this.props.history.push("/flights");
     } else {
       if (this.props.flight.hasOwnProperty("_id")) {
+        if (this.props.user && this.props.user.userDetails){
+          await this.props.userHoldFlight(this.props.user.userDetails, this.props.flight._id, true)
+        }
         this.props.history.push("/book");
       } else this.props.history.push("/");
     }
@@ -33,9 +36,6 @@ class SignIn extends Component {
     console.log(res);
     if (res) {
       await this.props.signIn(formData);
-      if (this.props.user && this.props.user.userDetails){
-        await this.props.userHoldFlight(this.props.user.userDetails, this.props.flight._id, true)
-      }
     }
     if (!this.props.errorMessage) {
       this.redirect();
