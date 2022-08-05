@@ -158,8 +158,12 @@ router.route("/search").post((req, res) => {
   console.log("flight search", req.body)
   const from = req.body.from;
   const to = req.body.to;
-  const startDate = Date.parse(req.body.date);
+  let time = new Date();
+  time = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+  let startDate = Date.parse(req.body.date);
   const endDate = startDate + 24 * 60 * 60 * 1000;
+  startDate =  new Date(req.body.date + " " + time);
+  console.log("startDate" ,startDate)
   console.log(endDate);
   Flight.find({ from, to, date: { $gte: startDate, $lt: endDate } })
     .exec()
